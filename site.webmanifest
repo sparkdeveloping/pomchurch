@@ -1,0 +1,9 @@
+{
+  "name": "The Pentecostals of Manhattan",
+  "short_name": "The POM",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f0e9",
+  "theme_color": "#111111",
+  "icons": []
+}
