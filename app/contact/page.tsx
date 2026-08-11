@@ -1,0 +1,6 @@
+import { ContactForm } from "@/components/contact-form";
+import { PageHero } from "@/components/page-hero";
+import { Reveal } from "@/components/reveal";
+import { site } from "@/lib/site";
+export const metadata={title:"Contact",description:"Contact The Pentecostals of Manhattan for prayer, Bible study, or help planning a visit."};
+export default function ContactPage(){return <main><PageHero eyebrow="Contact" title="We’d love to connect." copy="Planning a visit, looking for prayer, interested in Bible study, or just have a question? Send a note and someone from POM can follow up." image="/images/pastor-chat.jpg"/><section className="section"><div className="shell grid gap-16 lg:grid-cols-[.65fr_1.35fr]"><Reveal><div className="lg:sticky lg:top-28"><p className="eyebrow">Start here</p><h2 className="mt-6 text-5xl font-black uppercase leading-[.86] tracking-[-.06em]">Tell us how we can help.</h2><div className="mt-10 space-y-3 text-sm text-black/60"><a className="block hover:text-black" href={site.phoneHref}>{site.phone}</a><a className="block hover:text-black" href={`mailto:${site.email}`}>{site.email}</a><p>{site.address}</p></div></div></Reveal><Reveal delay={.08}><ContactForm/></Reveal></div></section></main>}

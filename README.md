@@ -1,114 +1,83 @@
-# The Pentecostals of Manhattan — Website Redesign
+# POM Church — Production Next.js Website
 
-A complete static website package for The Pentecostals of Manhattan (Manhattan, Kansas).
+Production-ready website for **The Pentecostals of Manhattan (Manhattan, Kansas)**.
 
-## Included pages
+## Stack
 
-- `index.html` — Homepage
-- `visit.html` — Plan Your Visit
-- `connect.html` — Ministries / groups
-- `watch.html` — Streaming / recent message
-- `events.html` — Events / weekly worship
-- `about.html` — Leadership, mission, beliefs
-- `give.html` — Giving
-- `contact.html` — Prayer / contact
-- `privacy.html` — Privacy overview
+- Next.js 16.3 App Router
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Motion for React (formerly Framer Motion)
+- Next/Image optimization
+- Route handlers for contact-form integration
+- Metadata, Open Graph, sitemap, robots, manifest, security headers
+- Vercel-ready configuration
 
-## Design system
-
-- Original POM-specific direction built around “Life gets better here.”
-- Warm off-white, near-black, and a high-energy coral accent.
-- One sans-serif system font family for fast loading and straightforward editing.
-- Responsive editorial layouts, image-led storytelling, scroll reveals, mobile navigation, ticker motion, accordion beliefs, and next-Sunday date logic.
-- Reduced-motion support is included.
-
-## Run locally
-
-No build step or package manager is required.
+## Local development
 
 ```bash
-python -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then open `http://localhost:8000`.
+Open `http://localhost:3000`.
 
-You can also open `index.html` directly in a browser, although a local server is recommended.
+## Production check
+
+```bash
+npm run lint
+npm run build
+npm start
+```
 
 ## Deploy to Vercel
 
-1. Put the contents of this folder in a Git repository.
-2. Import the repository into Vercel.
-3. Framework preset: **Other**.
-4. Build command: leave empty.
-5. Output directory: `.`
-6. Deploy.
+Push the **contents of this folder** to the root of the GitHub repository. Your GitHub repository homepage should show `app/`, `components/`, `public/`, `package.json`, etc. directly — not another nested `pom-next/` folder.
 
-`vercel.json` already includes clean URLs and basic security headers.
+Then import the repository in Vercel. Framework Preset should automatically detect **Next.js**. Leave Root Directory as `./`.
 
-## Important production notes
+## Production tasks before domain cutover
 
-### Giving
+1. **Giving URL:** `lib/site.ts` currently preserves the generic Tithe.ly destination from the prior build. Replace `site.giving` with POM's direct church-specific giving URL.
+2. **Contact form delivery:** `/app/api/contact/route.ts` is wired to the Resend REST API. Add `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`, and `CONTACT_TO_EMAIL` in Vercel Environment Variables. The endpoint returns an error rather than pretending to send if delivery is not configured.
+3. **Social/message URLs:** Confirm the Facebook Live and featured-message links in `lib/site.ts` before launch.
+4. **Images:** Current imagery is bundled locally in `/public/images` and optimized by `next/image`. Replace individual files there when newer approved POM photography is available.
+5. **Domain:** In Vercel → Project → Settings → Domains, add `pomchurch.life`, update DNS, and verify redirects/canonical behavior after cutover.
 
-The current POM website routes giving through Tithe.ly, but its public link resolves to Tithe.ly’s generic giving shell when fetched outside the existing site. The redesign therefore links to that provider. Before launch, replace the URL in `give.html` with POM’s church-specific Tithe.ly giving URL so visitors land directly on the correct organization.
+## Project structure
 
-Search for:
-
-```html
-https://tithe.ly/give_new/www/
+```text
+app/
+  api/contact/route.ts
+  about/
+  connect/
+  contact/
+  events/
+  give/
+  privacy/
+  visit/
+  watch/
+  globals.css
+  layout.tsx
+  page.tsx
+  sitemap.ts
+  robots.ts
+  manifest.ts
+components/
+  contact-form.tsx
+  footer.tsx
+  header.tsx
+  page-hero.tsx
+  reveal.tsx
+lib/
+  site.ts
+public/
+  images/
+  mark.svg
+  favicon.svg
 ```
 
-and replace it with the exact POM giving URL.
+## Content sources
 
-### Forms
-
-The Plan Your Visit and Contact forms intentionally use an email fallback. When submitted, they open the visitor’s email app with the form details addressed to `rev.dillon@pomchurch.life`.
-
-For production, these can be swapped to:
-
-- Planning Center Forms
-- Tithe.ly People / Forms
-- Church Center
-- Formspree
-- Basin
-- a Vercel serverless endpoint + Resend
-
-The form markup is already structured for a straightforward endpoint integration.
-
-### Events
-
-`events.html` shows the recurring Sunday gathering and directs visitors to POM’s active social channels for current special events. For a production CMS workflow, connect this section to Planning Center, Tithe.ly Events, Google Calendar, or another events source.
-
-### Photography
-
-The bundled photography was downloaded from POM’s current public website and is listed in `SOURCES.md`. Confirm the church has deployment rights to those photographs before publishing this redesign.
-
-## Editing global styles
-
-Main styles:
-
-`assets/css/styles.css`
-
-Main behavior:
-
-`assets/js/app.js`
-
-Brand mark:
-
-`assets/icons/mark.svg`
-
-Primary design tokens are at the top of `styles.css`:
-
-```css
---ink: #111111;
---paper: #f4f0e9;
---accent: #ff4b2b;
-```
-
-## Contact details currently used
-
-- Sunday: 10:30 AM
-- 530 Richards Dr., Manhattan, KS 66502
-- (316) 755-8767
-- rev.dillon@pomchurch.life
-- Instagram: `@thepomks`
-# pomchurch
+Public church information used in the build was verified against `pomchurch.life` in August 2026. See `SOURCES.md`.
